@@ -82,12 +82,7 @@ function f1(
     amf.copy(in1, 14, 0, 2);
 
     in1 = XORBytes(in1, op_c, 16);
-
-    console.log(in1.toString('hex'));
-
     in1 = rotateLeft128(in1, R[0]);
-
-    console.log(in1.toString('hex'));
 
     // in1 = temp ^ in1 ^ C[0]
     // but C[0] is all zero bits so we can skip the XOR for it
