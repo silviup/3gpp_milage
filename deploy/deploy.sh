@@ -2,7 +2,7 @@
 
 # Set variables
 FUNCTION_NAME="generate3GAuthVector"
-ZIP_FILE="function.zip"
+ZIP_FILE="generate3GAuthVector.zip"
 DIST_DIR="dist"
 
 echo "Installing dependencies..."
