@@ -8,10 +8,11 @@ export async function handler(
     event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> {
     try {
-        // event.body may contain your JSON input
+        // event.body may contain or NOT the JSON input
         if (!event.body) {
             return {
                 statusCode: 400,
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     error: 'Request body is empty.'
                 }),
@@ -24,6 +25,7 @@ export async function handler(
         if (!op || !key) {
             return {
                 statusCode: 400,
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     error: 'Missing "op" or "key" in request body.'
                 }),
@@ -35,12 +37,14 @@ export async function handler(
 
         return {
             statusCode: 200,
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(authVector),
         };
     } catch (err) {
         console.error('Error generating 3G Auth Vector:', err);
         return {
             statusCode: 500,
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ error: 'Internal Server Error' }),
         };
     }

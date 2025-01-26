@@ -17,7 +17,7 @@ const C: Buffer[] = [
 // 2 bytes (16 bits) AMF
 const AMF: Buffer = Buffer.from('0000', 'hex');
 
-// XOR two arrays of 16 bytes each
+// XOR two arrays of bytes
 function XORBytes(a: Buffer, b: Buffer, len: number): Buffer {
 
     const result = Buffer.alloc(len);
@@ -135,7 +135,7 @@ function f2345(
 
 export interface AuthVector {
     RAND: string;
-    RES: string;
+    XRES: string;
     CK: string;
     IK: string;
     AUTN: string;
@@ -170,7 +170,7 @@ export function generate3GAuthVector(keyHex: string, opHex: string): AuthVector 
 
     return {
         RAND: RAND.toString('hex'),
-        RES: res.toString('hex'),
+        XRES: res.toString('hex'),
         CK: ck.toString('hex'),
         IK: ik.toString('hex'),
         AUTN: AUTN.toString('hex'),

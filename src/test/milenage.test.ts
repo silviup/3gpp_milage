@@ -95,7 +95,7 @@ describe('generate3GAuthVector()', () => {
 
         // Check presence of the 5 fields
         expect(result).toHaveProperty('RAND');
-        expect(result).toHaveProperty('RES');
+        expect(result).toHaveProperty('XRES');
         expect(result).toHaveProperty('CK');
         expect(result).toHaveProperty('IK');
         expect(result).toHaveProperty('AUTN');
@@ -103,7 +103,7 @@ describe('generate3GAuthVector()', () => {
         // Check each is hex string
         const hexPattern = /^[a-f0-9]+$/i;
         expect(result.RAND).toMatch(hexPattern);
-        expect(result.RES).toMatch(hexPattern);
+        expect(result.XRES).toMatch(hexPattern);
         expect(result.CK).toMatch(hexPattern);
         expect(result.IK).toMatch(hexPattern);
         expect(result.AUTN).toMatch(hexPattern);
