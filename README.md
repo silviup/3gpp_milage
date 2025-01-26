@@ -56,7 +56,7 @@ The project includes all key components required for generating
 
 
 ## REST API Usage
-Deploy the `aws-lambda.ts` file as an AWS Lambda function. Example invocation:
+Deploy the `index.ts` file as an AWS Lambda function. Example invocation:
 ```bash
 curl -X POST https://<api-endpoint> \
     -H "Content-Type: application/json" \
@@ -67,7 +67,7 @@ Example response:
 ```json
 {
   "RAND": "23553cbe9637a89d218ae64dae47bf35",
-  "RES": "4a9ffac354dfafb3",
+  "XRES": "4a9ffac354dfafb3",
   "CK": "a0a1a2a3a4a5a6a7a8a9aaabacadaeaf",
   "IK": "b0b1b2b3b4b5b6b7b8b9babbbcbdbebf",
   "AUTN": "ff9bb4d0b607b9b94a9ffac354dfafb3"
