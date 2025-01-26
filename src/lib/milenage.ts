@@ -14,9 +14,6 @@ const C: Buffer[] = [
     Buffer.from('00000000000000000000000000000008', 'hex'), // c5 0...1000
 ];
 
-// 2 bytes (16 bits) AMF
-const AMF: Buffer = Buffer.from('0000', 'hex');
-
 // XOR two arrays of bytes
 function XORBytes(a: Buffer, b: Buffer, len: number): Buffer {
 
@@ -107,9 +104,10 @@ function f2345(
 
     // Compute outX (general formula)
     const computeOutX = (inBuf: Buffer, c: Buffer, r: number): Buffer => {
-        const buf = XORBytes(inBuf, c, 16);
-        const rotated = rotateLeft128(buf, r);
-        return XORBytes(aes128Encrypt(key, rotated), op_c, 16);
+        const add1 = XORBytes(inBuf, op_c, 16);
+        const rotated = rotateLeft128(add1, r);
+        const add2 = XORBytes(rotated, c, 16);
+        return XORBytes(aes128Encrypt(key, add2), op_c, 16);
     };
 
     // out2, out3, out4, out5
@@ -119,7 +117,7 @@ function f2345(
     const out5 = computeOutX(out, C[4], R[4]);
 
     // f2 => RES (for typical 3G is 64-bit -> out2[0..7])
-    const res = out2.subarray(0, 8);
+    const res = out2.subarray(8, 16);
 
     // f3 => CK (128-bit)
     const ck = out3;
@@ -128,7 +126,7 @@ function f2345(
     const ik = out4;
 
     // f5 => AK (6 bytes from out5)
-    const ak = out5.subarray(0, 6);
+    const ak = out2.subarray(0, 6);
 
     return { res, ck, ik, ak };
 }
@@ -146,17 +144,23 @@ export interface AuthVector {
  * Output: 3G Authentication Vector: { RAND, RES, CK, IK, AUTN }
  */
 export function generate3GAuthVector(keyHex: string, opHex: string): AuthVector {
+    // Key (16 bytes)
     const K = Buffer.from(keyHex, 'hex');
+
+    // Operator Variant Algorithm Configuration Field (16 bytes)
     const OP = Buffer.from(opHex, 'hex');
+
+    // Sequence Number (6 bytes)
+    const SQN = Buffer.from('000000000000', 'hex');
+
+    // Authentication Management Field (2 bytes)
+    const AMF: Buffer = Buffer.from('0000', 'hex');
 
     // Compute OPc
     const op_c = computeOPc(K, OP);
 
     // Generate a random RAND (16 bytes)
     const RAND = crypto.randomBytes(16);
-
-    // For demonstration: random SQN (6 bytes)
-    const SQN = crypto.randomBytes(6);
 
     // f1 => MAC-A
     const macA = f1(K, op_c, RAND, SQN, AMF);
